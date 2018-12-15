@@ -1,0 +1,248 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="System1Login"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="In_URL" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>System1Login_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Security</x:String>
+      <x:String>System.Net</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="Opens up the domain.com website based on the paramters given in the configuration file" DisplayName="Open Domain.Com " sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <ui:OpenBrowser UiBrowser="{x:Null}" BrowserType="Chrome" DisplayName="Open Browser" Hidden="False" sap2010:WorkflowViewState.IdRef="OpenBrowser_1" NewSession="True" Private="False" Url="[In_URL]">
+      <ui:OpenBrowser.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_2">
+            <Sequence.Variables>
+              <Variable x:TypeArguments="x:Boolean" Name="boolDomainLoaded" />
+              <Variable x:TypeArguments="x:String" Name="strNumresult" />
+            </Sequence.Variables>
+            <ui:MaximizeWindow Window="{x:Null}" DisplayName="Maximize Window" sap2010:WorkflowViewState.IdRef="MaximizeWindow_1" />
+            <ui:UiElementExists sap2010:Annotation.AnnotationText="Checks if the Domain logo has been loaded. If the domain logo has not been loaded, then there is an error in the application " DisplayName="Check if Domain Exists" Exists="[boolDomainLoaded]" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
+              <ui:UiElementExists.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="a6b792b1bcd43e09955165e014feee38" Selector="&lt;html app='chrome.exe' title='* | Domain' /&gt;&lt;webctrl omit:css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;header&amp;gt;div&amp;gt;div&amp;gt;a&amp;gt;div&amp;gt;svg&amp;gt;path' tag='path' /&gt;" TimeoutMS="3000" WaitForReady="COMPLETE" />
+              </ui:UiElementExists.Target>
+            </ui:UiElementExists>
+            <If Condition="[boolDomainLoaded=false]" DisplayName="If Domain image exists or not" sap2010:WorkflowViewState.IdRef="If_2">
+              <If.Then>
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
+                  <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="SendEmail for error in page loading" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Framework\SendEmail.xaml">
+                    <ui:InvokeWorkflowFile.Arguments>
+                      <InArgument x:TypeArguments="x:String" x:Key="in_receipient">[in_Config("TO_EMAIL_ID").ToString]</InArgument>
+                      <InArgument x:TypeArguments="x:String" x:Key="in_subject">[in_Config("SUBJECT_ERROR").ToString + ": Invalid Page , workflow : Domain_Login"]</InArgument>
+                      <InArgument x:TypeArguments="x:String" x:Key="in_body">Error in loading the page</InArgument>
+                      <InArgument x:TypeArguments="x:String" x:Key="in_filepath" />
+                    </ui:InvokeWorkflowFile.Arguments>
+                  </ui:InvokeWorkflowFile>
+                  <Throw Exception="[new exception(&quot;Error in Loading Page&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_2" />
+                </Sequence>
+              </If.Then>
+              <If.Else>
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+                  <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get the # of search results" sap2010:WorkflowViewState.IdRef="GetValue_1">
+                    <ui:GetValue.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="3545304aa44ff001e1816f239a60146e" Selector="&lt;webctrl tag='STRONG' /&gt;" WaitForReady="INTERACTIVE" />
+                    </ui:GetValue.Target>
+                    <ui:GetValue.Value>
+                      <OutArgument x:TypeArguments="x:String">[strNumresult]</OutArgument>
+                    </ui:GetValue.Value>
+                  </ui:GetValue>
+                  <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;Result &quot; + strNumresult]" />
+                  <TryCatch DisplayName="Try Catch" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+                    <TryCatch.Variables>
+                      <Variable x:TypeArguments="x:Int64" Name="intNumResult" />
+                    </TryCatch.Variables>
+                    <TryCatch.Try>
+                      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+                        <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="x:Int64">[intNumResult]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="x:Int64">[Convert.ToInt64(strNumresult.Substring(0,strNumresult.IndexOf(",")))]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                        <If Condition="[intNumResult &lt; 1]" sap2010:WorkflowViewState.IdRef="If_3">
+                          <If.Then>
+                            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName=" SendEmail for No Data" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="Framework\SendEmail.xaml">
+                              <ui:InvokeWorkflowFile.Arguments>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_receipient">[in_Config("TO_EMAIL_ID").ToString]</InArgument>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_subject">[in_Config("SUBJECT_NODATA").ToString + "workflow : Domain_Login"]</InArgument>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_body">No Data Found</InArgument>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_filepath" />
+                              </ui:InvokeWorkflowFile.Arguments>
+                            </ui:InvokeWorkflowFile>
+                          </If.Then>
+                        </If>
+                      </Sequence>
+                    </TryCatch.Try>
+                    <TryCatch.Catches>
+                      <Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+                        <ActivityAction x:TypeArguments="s:Exception">
+                          <ActivityAction.Argument>
+                            <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                          </ActivityAction.Argument>
+                          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+                            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="SendEmail for Error" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Framework\SendEmail.xaml">
+                              <ui:InvokeWorkflowFile.Arguments>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_receipient">[in_Config("TO_EMAIL_ID").ToString]</InArgument>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_subject">[in_Config("SUBJECT_ERROR").ToString + ": workflow : Domain_Login : Error :" + exception.Message]</InArgument>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_body">Error in loading the page</InArgument>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_filepath" />
+                              </ui:InvokeWorkflowFile.Arguments>
+                            </ui:InvokeWorkflowFile>
+                            <Throw Exception="[new Exception(&quot;No Data Found&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_1" />
+                          </Sequence>
+                        </ActivityAction>
+                      </Catch>
+                    </TryCatch.Catches>
+                  </TryCatch>
+                </Sequence>
+              </If.Else>
+            </If>
+          </Sequence>
+        </ActivityAction>
+      </ui:OpenBrowser.Body>
+    </ui:OpenBrowser>
+    <sads:DebugSymbol.Symbol>d0ZDOlxVc2Vyc1xSYWppYlxEb2N1bWVudHNcVWlQYXRoXFJlbnQgQW5hbHlzaXNcRG9tYWluXERvbWFpbl9Mb2dpbi54YW1sLUcDqwEOAgEBSAWpARYCAQJIvwFIyQECATpOC6YBFgIBA1MNU4UBAgE5VA1YIgIBNFkNpQESAgEEVosBVuQCAgE4Vu8CVvUCAgE3VO8BVIMCAgE1WRtZNQIBBVsRZRwCASpoEaMBHAIBB1wTYysCAS1kE2SFAQIBK2kTcCECASZxE3GpAQIBI3ITogEeAgEIYE5gZwIBM15UXncCATFczgFc6AECATBfUV+jAQIBLmQkZFgCASxuP25NAgEna6YBa8YBAgEpcYABcaYBAgEkdxeMASICARSUARueASYCAQl4GX8iAgEfgAEZiwEeAgEVlQEdnAE1AgEMnQEdnQGHAQIBCn1DfYkBAgEiekR6UgIBIIABJ4ABPgIBFoIBHYkBNQIBGJkBWJkBcQIBE5cBXpcBgQECARGVAcgBlQHiAQIBEJgBW5gBvAECAQ2dAS6dAVoCAQuGAViGAWUCAR6EAV6EAYEBAgEcggHLAYIB5QECARuFAVuFAZ0BAgEZ</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="MaximizeWindow_1" sap:VirtualizedContainerService.HintSize="887,22" />
+      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="887,163">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Throw_2" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="336,273">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="504,106" />
+      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="504,91" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="464,60" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_4" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="464,234" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="486,458">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Throw_1" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,273">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Catch`1_1" sap:VirtualizedContainerService.HintSize="400,21">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TryCatch_1" sap:VirtualizedContainerService.HintSize="504,685" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="526,1086">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="887,1233" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="909,1622">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="OpenBrowser_1" sap:VirtualizedContainerService.HintSize="923,1721" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="945,1872">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="System1Login_1" sap:VirtualizedContainerService.HintSize="985,1952" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

@@ -1,0 +1,409 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="ProcessTransaction"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:sd="clr-namespace:System.Data;assembly=System.Data"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_TransactionItem" Type="InArgument(x:String)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="in_rowIndex" Type="InArgument(x:Int32)" />
+    <x:Property Name="out_RowIndex" Type="InArgument(x:Int32)" />
+    <x:Property Name="in_Final_URL" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>ProcessTransaction_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>UiPath.Excel</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.Data.Entity</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="Description: In this file all other process specific files will be invoked. If an application exception occurs, the current transaction can be retried. If a BRE is thrown, the transaction will be skipped. Can be a flowchart or sequence. " DisplayName="ProcessTransaction" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="sd:DataTable" Name="tbl_output" />
+      <Variable x:TypeArguments="x:Int32" Name="intSubStrLength" />
+      <Variable x:TypeArguments="x:String" Default="Data\Temp\temp.xlsx" Name="strTempFilePath" />
+    </Sequence.Variables>
+    <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;Inside Process &quot; + in_Final_URL]" />
+    <ui:BuildDataTable sap2010:Annotation.AnnotationText="Build a data table that will store the value after scraping the data from the page" DataTable="[tbl_output]" DisplayName="Build Data Table" sap2010:WorkflowViewState.IdRef="BuildDataTable_1" TableInfo="&lt;NewDataSet&gt;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xA;      &lt;xs:complexType&gt;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xA;            &lt;xs:complexType&gt;&#xA;              &lt;xs:sequence&gt;&#xA;                &lt;xs:element name=&quot;Address&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;PriceExtract&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Price&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Bedroom&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Bathroom&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Parking&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;URL&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;              &lt;/xs:sequence&gt;&#xA;            &lt;/xs:complexType&gt;&#xA;          &lt;/xs:element&gt;&#xA;        &lt;/xs:choice&gt;&#xA;      &lt;/xs:complexType&gt;&#xA;    &lt;/xs:element&gt;&#xA;  &lt;/xs:schema&gt;&#xA;  &lt;TableName /&gt;&#xA;&lt;/NewDataSet&gt;" />
+    <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="Chrome" DisplayName="Attach Browser Domain.Com" sap2010:WorkflowViewState.IdRef="BrowserScope_1" InformativeScreenshot="9515dd6bea27aa12afbd7255ddd0f137" Selector="&lt;html app='chrome.exe' title='*Bedroom Apartments for Rent in postcode* | Domain' /&gt;">
+      <ui:BrowserScope.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_6">
+            <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[&quot;Inside Process Transaction No :&quot; + in_transactionitem]" />
+            <If Condition="[in_Config(&quot;SEARCH_TYPE&quot;).ToString.ToUpper = &quot;RENT&quot;]" sap2010:WorkflowViewState.IdRef="If_3">
+              <If.Then>
+                <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int32">[intSubStrLength]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int32">5</InArgument>
+                  </Assign.Value>
+                </Assign>
+              </If.Then>
+              <If.Else>
+                <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int32">[intSubStrLength]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int32">8</InArgument>
+                  </Assign.Value>
+                </Assign>
+              </If.Else>
+            </If>
+            <If Condition="[string.IsNullOrEmpty(in_transactionitem)]" sap2010:WorkflowViewState.IdRef="If_2">
+              <If.Else>
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_9">
+                  <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;Current Transaction :&quot; + in_transactionitem]" />
+                  <ui:NavigateTo Browser="{x:Null}" DisplayName="Navigate To" sap2010:WorkflowViewState.IdRef="NavigateTo_1" Url="[in_Final_URL + &quot;&amp;page=&quot; + in_TransactionItem]" />
+                  <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_2">
+                    <Sequence.Variables>
+                      <Variable x:TypeArguments="ui:WorkbookApplication" Name="objExcel" />
+                      <Variable x:TypeArguments="x:Int32" Default="0" Name="current_Row_Index" />
+                      <Variable x:TypeArguments="sd:DataTable" Name="tblURLExtract" />
+                    </Sequence.Variables>
+                    <ui:ExtractData NextLinkSelector="{x:Null}" sap2010:Annotation.AnnotationText="Extract the structured data (primarily URL) from the page and put it into the datatable &quot;tblURLExtract&quot;" ContinueOnError="True" DataTable="[tblURLExtract]" DelayBetweenPagesMS="300" DisplayName="Extract URL" ExtractMetadata="&lt;extract&gt;&lt;column name='Adress' attr='text' exact='1' attr2='href' name2='URL'&gt;&lt;webctrl tag='li' class='search-results__listing' /&gt;&lt;webctrl tag='div' class='listing-result__standard-standard is-no-inspection-mobile' idx='1' /&gt;&lt;webctrl tag='div' class='listing-result__details listing-result__right' idx='1' /&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='a' class='address is-two-lines listing-result__address' idx='1' /&gt;&lt;/column&gt;&lt;/extract&gt;" sap2010:WorkflowViewState.IdRef="ExtractData_2" MaxNumberOfResults="100">
+                      <ui:ExtractData.Target>
+                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="212520a71c83e81dcb00efb428d5f879" Selector="&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;ul' parentid='skip-link-content' tag='UL' /&gt;" WaitForReady="COMPLETE" />
+                      </ui:ExtractData.Target>
+                    </ui:ExtractData>
+                    <ui:ForEachRow CurrentIndex="{x:Null}" sap2010:Annotation.AnnotationText="Run through each row of the datatable and perform the following&#xD;&#xA;1) navigate to the URL in that row&#xD;&#xA;2) extract the address, price, URL, # of bedrooms, # of bathrooms, # of parking etc&#xD;&#xA;3) Add the data to a new instance of the datarow&#xD;&#xA;4) Add the datarow to a table &quot;tblOutput&quot;&#xD;&#xA;5) Add the table to the temp excel stored in the temp directory (&quot;Data\Temp&quot;) directory using &quot;AppendRange&quot;" DataTable="[tblURLExtract]" DisplayName="For Each Row" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
+                      <ui:ForEachRow.Body>
+                        <ActivityAction x:TypeArguments="sd:DataRow">
+                          <ActivityAction.Argument>
+                            <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+                          </ActivityAction.Argument>
+                          <Sequence DisplayName="Loop through the table" sap2010:WorkflowViewState.IdRef="Sequence_18">
+                            <Sequence.Variables>
+                              <Variable x:TypeArguments="x:String" Name="strPrice" />
+                              <Variable x:TypeArguments="x:String" Name="strAddress" />
+                              <Variable x:TypeArguments="x:String" Name="strBedroom" />
+                              <Variable x:TypeArguments="x:String" Name="strBathroom" />
+                              <Variable x:TypeArguments="x:String" Name="strParking" />
+                              <Variable x:TypeArguments="x:String" Name="strlPriceExtract" />
+                            </Sequence.Variables>
+                            <ui:NavigateTo Browser="{x:Null}" DisplayName="Navigate To" sap2010:WorkflowViewState.IdRef="NavigateTo_3" Url="[row(1).ToString]" />
+                            <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Scrap Address" sap2010:WorkflowViewState.IdRef="GetValue_1">
+                              <ui:GetValue.Target>
+                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="eaee93f7540084752c1f6dcf2a1c0b9f" Selector="&lt;webctrl tag='H1' /&gt;" WaitForReady="INTERACTIVE" />
+                              </ui:GetValue.Target>
+                              <ui:GetValue.Value>
+                                <OutArgument x:TypeArguments="x:String">[strAddress]</OutArgument>
+                              </ui:GetValue.Value>
+                            </ui:GetValue>
+                            <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Scrap Price" sap2010:WorkflowViewState.IdRef="GetValue_2">
+                              <ui:GetValue.Target>
+                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e6dc5dafd2891bfb5d9170b9a3de4103" Selector="&lt;webctrl tag='DIV' class='listing-details__summary-title' isleaf='1' /&gt;" WaitForReady="INTERACTIVE" />
+                              </ui:GetValue.Target>
+                              <ui:GetValue.Value>
+                                <OutArgument x:TypeArguments="x:String">[strPrice]</OutArgument>
+                              </ui:GetValue.Value>
+                            </ui:GetValue>
+                            <Assign sap2010:WorkflowViewState.IdRef="Assign_6">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:String">[strPrice]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:String">[trim(strprice)]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <TryCatch DisplayName="Try Catch" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+                              <TryCatch.Try>
+                                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_19">
+                                  <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Info" Message="[strPrice + &quot; - &quot; + strPrice.IndexOf(&quot; &quot;).ToString]" />
+                                  <If sap2010:Annotation.AnnotationText="--Since the price info extracted is a text with other information, the actual price has to be extracted using string manupulation method (here substring)" Condition="[strPrice.IndexOf(&quot; &quot;) &gt; 0]" sap2010:WorkflowViewState.IdRef="If_4">
+                                    <If.Then>
+                                      <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="x:String">[strlPriceExtract]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="x:String">[strPrice.Substring(0,strPrice.IndexOf(" ")).Replace("$","")]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                    </If.Then>
+                                    <If.Else>
+                                      <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="x:String">[strlPriceExtract]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="x:String">[strPrice]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                    </If.Else>
+                                  </If>
+                                </Sequence>
+                              </TryCatch.Try>
+                              <TryCatch.Catches>
+                                <Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+                                  <ActivityAction x:TypeArguments="s:Exception">
+                                    <ActivityAction.Argument>
+                                      <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                                    </ActivityAction.Argument>
+                                    <Assign sap2010:Annotation.AnnotationText="--If there is an error while performing string manupulation, the text extracted has to be directly assigned to the variable" sap2010:WorkflowViewState.IdRef="Assign_3">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:String">[strlPriceExtract]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:String">[strPrice]</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                  </ActivityAction>
+                                </Catch>
+                              </TryCatch.Catches>
+                            </TryCatch>
+                            <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[&quot;Price &quot; + strPrice]" />
+                            <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Scrap Bedroom" sap2010:WorkflowViewState.IdRef="GetValue_3">
+                              <ui:GetValue.Target>
+                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="296163da28b2d18174075855836736f0" Selector="&lt;webctrl tag='SPAN' class='property-feature__feature-text-container' idx='1' /&gt;" WaitForReady="INTERACTIVE" />
+                              </ui:GetValue.Target>
+                              <ui:GetValue.Value>
+                                <OutArgument x:TypeArguments="x:String">[strBedroom]</OutArgument>
+                              </ui:GetValue.Value>
+                            </ui:GetValue>
+                            <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Scrap Bathroom" sap2010:WorkflowViewState.IdRef="GetValue_4">
+                              <ui:GetValue.Target>
+                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e1172ec23521558a9f4dfa11fd98c04b" Selector="&lt;webctrl tag='SPAN' class='property-feature__feature-text-container' idx='2' /&gt;" WaitForReady="INTERACTIVE" />
+                              </ui:GetValue.Target>
+                              <ui:GetValue.Value>
+                                <OutArgument x:TypeArguments="x:String">[strBathroom]</OutArgument>
+                              </ui:GetValue.Value>
+                            </ui:GetValue>
+                            <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Scrap Parking" sap2010:WorkflowViewState.IdRef="GetValue_5">
+                              <ui:GetValue.Target>
+                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="727dc4f5a581fd95c46dd6fc679cc403" Selector="&lt;webctrl tag='SPAN' class='property-feature__feature-text-container' idx='3' /&gt;" WaitForReady="INTERACTIVE" />
+                              </ui:GetValue.Target>
+                              <ui:GetValue.Value>
+                                <OutArgument x:TypeArguments="x:String">[strParking]</OutArgument>
+                              </ui:GetValue.Value>
+                            </ui:GetValue>
+                            <ui:AddDataRow DataRow="{x:Null}" sap2010:Annotation.AnnotationText="--Add the extracted data to a data row amd add the datarow to the datatable &quot;tbl_output&quot;" ArrayRow="[{strAddress,strlPriceExtract,strprice,strBedroom,strBathroom,strParking,row(1).ToString}]" DataTable="[tbl_output]" DisplayName="Add Data Row" sap2010:WorkflowViewState.IdRef="AddDataRow_1" />
+                          </Sequence>
+                        </ActivityAction>
+                      </ui:ForEachRow.Body>
+                    </ui:ForEachRow>
+                    <ui:ExcelApplicationScope Password="{x:Null}" sap2010:Annotation.AnnotationText="--Open the temp excel and append the datatable using appendrange " DisplayName="Excel application scope" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_2" Visible="False" Workbook="[objExcel]" WorkbookPath="[strTempFilePath]">
+                      <ui:ExcelApplicationScope.Body>
+                        <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+                          <ActivityAction.Argument>
+                            <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+                          </ActivityAction.Argument>
+                          <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_15">
+                            <ui:ExcelAppendRange DataTable="[tbl_output]" DisplayName="Append Range" sap2010:WorkflowViewState.IdRef="ExcelAppendRange_3" SheetName="Sheet1" />
+                          </Sequence>
+                        </ActivityAction>
+                      </ui:ExcelApplicationScope.Body>
+                    </ui:ExcelApplicationScope>
+                    <ui:ExcelCloseWorkbook DisplayName="Close Workbook" sap2010:WorkflowViewState.IdRef="ExcelCloseWorkbook_1" Workbook="[objExcel]" />
+                    <ui:NavigateTo Browser="{x:Null}" DisplayName="Navigate To" sap2010:WorkflowViewState.IdRef="NavigateTo_4" Url="[in_Final_URL + &quot;&amp;page=&quot; + in_TransactionItem]" />
+                  </Sequence>
+                </Sequence>
+              </If.Else>
+            </If>
+          </Sequence>
+        </ActivityAction>
+      </ui:BrowserScope.Body>
+    </ui:BrowserScope>
+    <sads:DebugSymbol.Symbol>d0RDOlxVc2Vyc1xSYWppYlxEb2N1bWVudHNcVWlQYXRoXFJlbnQgQW5hbHlzaXNcRnJhbWV3b3JrXFByb2Nlc3MueGFtbFlPA5ACDgIBAVM0U0kCAQJVBVWjAQIBe1YFVs0PAgF4VwWOAhcCAQNVclWgAQIBfFaZAVanAQIBeVeaAlf2AgIBd10LiwIWAgEEXg1ewQECAXRfDXQSAgFpdQ2KAhICAQVeel6+AQIBdV8bX2UCAWphEWgaAgFwaxFyGgIBbHUbdUcCAQZ3EYgCHAIBCGY7ZjwCAXNjPGNNAgFxcDtwPAIBb208bU0CAW14E3i9AQIBZnkTecMBAgFiehOHAh4CAQl4gAF4ugECAWd5ggF5wAECAWN9Q31GAgEKgAEVhAEmAgFahQEV+AElAgEc+QEVhAIwAgEShQIVhQKYAQIBD4YCFYYCxQECAQuAAf4GgAGDBwIBYYIBqAGCAcECAgFggAGeAoABowICAV+AAecBgAHtAQIBXoAB+AGAAYkCAgFcgAHOAoABugYCAVuFAbMEhQHEBAIBWIsBG/UBJgIBHfkBogL5Aa4CAgEa+QG8AvkBzwICARj/ARuBAiYCAROFAokBhQKVAQIBEIYChAGGAsIBAgEMlAEdlAGiAQIBVpUBHZwBKwIBUp0BHaQBKwIBTqUBHawBJgIBSq0BHdoBKAIBMdsBHdsBrgECAS7cAR3jASsCASrkAR3rASsCASbsAR3zASsCASL0AR30AZEDAgEegAIdgAKwAQIBFJQBjAGUAZ8BAgFXmgFJmgFVAgFTlwGwAZcBzAECAVWiAUmiAVMCAU+fAbABnwH/AQIBUaoBSKoBWAIBTacBSacBUwIBS68BIccBLAIBN88BJdYBLgIBMtsBigHbAasBAgEv4QFJ4QFVAgEr3gGwAd4BhwICAS3pAUnpAVYCASfmAbAB5gGHAgIBKfEBSfEBVQIBI+4BsAHuAYcCAgEl9AG2AvQBxAICASD0Ac8B9AGrAgIBH4ACPIACSgIBFoACpQGAAq0BAgEVsAEjsAHcAQIBRrEBI8YBKAIBONQBUNQBWgIBNdEBUdEBYwIBM7ABkAGwAdkBAgFHsQHvAbEBmQICATmzASe6ATACAUC9ASfEATACATu4AVK4AY8BAgFDtQFTtQFlAgFBwgFSwgFcAgE+vwFTvwFlAgE8</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="671,91" />
+      <sap2010:ViewStateData Id="BuildDataTable_1" sap:VirtualizedContainerService.HintSize="671,101">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="635,91" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="635,207" />
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="488,91" />
+      <sap2010:ViewStateData Id="NavigateTo_1" sap:VirtualizedContainerService.HintSize="488,59" />
+      <sap2010:ViewStateData Id="ExtractData_2" sap:VirtualizedContainerService.HintSize="466,148">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="NavigateTo_3" sap:VirtualizedContainerService.HintSize="414,59" />
+      <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="414,106" />
+      <sap2010:ViewStateData Id="GetValue_2" sap:VirtualizedContainerService.HintSize="414,106" />
+      <sap2010:ViewStateData Id="Assign_6" sap:VirtualizedContainerService.HintSize="414,60" />
+      <sap2010:ViewStateData Id="LogMessage_6" sap:VirtualizedContainerService.HintSize="509,91" />
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="509,249">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_19" sap:VirtualizedContainerService.HintSize="531,504">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,132">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Catch`1_1" sap:VirtualizedContainerService.HintSize="400,201">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TryCatch_1" sap:VirtualizedContainerService.HintSize="414,363" />
+      <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="414,91" />
+      <sap2010:ViewStateData Id="GetValue_3" sap:VirtualizedContainerService.HintSize="414,106" />
+      <sap2010:ViewStateData Id="GetValue_4" sap:VirtualizedContainerService.HintSize="414,106" />
+      <sap2010:ViewStateData Id="GetValue_5" sap:VirtualizedContainerService.HintSize="414,106" />
+      <sap2010:ViewStateData Id="AddDataRow_1" sap:VirtualizedContainerService.HintSize="414,94">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_18" sap:VirtualizedContainerService.HintSize="436,1681">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ForEachRow_1" sap:VirtualizedContainerService.HintSize="466,1960">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExcelAppendRange_3" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_15" sap:VirtualizedContainerService.HintSize="336,211">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExcelApplicationScope_2" sap:VirtualizedContainerService.HintSize="466,347">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExcelCloseWorkbook_1" sap:VirtualizedContainerService.HintSize="466,59" />
+      <sap2010:ViewStateData Id="NavigateTo_4" sap:VirtualizedContainerService.HintSize="466,59" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="488,2857">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="510,3211">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="635,3358" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="657,3860">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="BrowserScope_1" sap:VirtualizedContainerService.HintSize="671,4006" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="693,4444">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ProcessTransaction_1" sap:VirtualizedContainerService.HintSize="733,4524" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
